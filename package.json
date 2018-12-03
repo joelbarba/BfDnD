@@ -1,0 +1,16 @@
+{
+  "name": "simplengapp",
+  "version": "1.0.0",
+  "description": "This is a very simple Angular app for testing",
+  "main": "app.js",
+  "dependencies": {
+    "http-server": "^0.11.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server -a localhost -p 8000 -c-1 ./"
+  },
+  "author": "Joel Barba",
+  "license": "ISC"
+}
