@@ -1,108 +1,43 @@
 console.log('app loading');
 
-var myApp = angular.module('myApp', []);
-
+var myApp = angular.module('myApp', ['bf.DnD']);
 myApp.run(function() {
   console.log('Ruuning!');
 });
 
-
 myApp.component('main', {
   templateUrl: 'main.html',
   controllerAs: '$ctrl',
-  controller: function(BfDnD, $scope) {
-    console.log('main component');
+  controller: ['BfDnD', function(BfDnD) {
+    this.container1 = { name: 'Container 1', list: [
+      {id:1, name: 'Alice',   number: 123, containerId: 'cont-1', listPos: 0 },
+      {id:2, name: 'Bob',     number: 567, containerId: 'cont-1', listPos: 1 },
+      {id:3, name: 'Argilac', number: 001, containerId: 'cont-1', listPos: 2 },
+      {id:4, name: 'Roy',     number: 007, containerId: 'cont-1', listPos: 3 }
+    ]};
+    this.container2 = { name: 'Container 2', list: [] };
+    this.container3 = { name: 'Container 3', list: [] };
 
-    this.obj1 = {id:1, name: 'Alice', number: 1234 };
+    this.placeholders = [
+      { pos: 0, empty: true },
+      { pos: 1, empty: true },
+      { pos: 2, empty: true },
+      { pos: 3, empty: true },
+    ]
 
-    // var a = [
-    //   {id:1, name: 'Alice', number: 1234 },
-    //   {id:2, name: 'Bob', number: 1234 },
-    //   {id:3, name: 'Wallace', number: 1234 },
-    //   {id:4, name: 'Shane', number: 1234 },
-    // ];
+    BfDnD.onDragStart = ($element, bfDraggable, bfDragMode) => {
+      console.log('Starting a dragging');
+    }
+    BfDnD.onDragEndKo = (bfDraggable) => {
+      console.log('Drop out');
+    };
+    
+    BfDnD.onDragEndOk = (bfDraggable, bfDropContainer, bfDropPlaceholder) => {
+      console.log('Drop into container', bfDropContainer.name);
+      bfDropContainer.list.push(bfDraggable);
+      this.myList = this.myList.filter(function(item) { return item.id !== bfDraggable.id });
+    }
 
-    // var b = a.getById(2);
-    // console.log(b);
-
-
-  }
+  }]
 });
 
-
-
-
-// --------- Globals ----------------
-
-myApp.generateGUID = function() {
-  // If we have a cryptographically secure PRNG, use that
-  if (typeof (window.crypto) !== 'undefined' && typeof (window.crypto.getRandomValues) !== 'undefined') {
-    var buf = new Uint16Array(8);
-    window.crypto.getRandomValues(buf);
-    var S4 = function (num) {
-      var ret = num.toString(16);
-      while (ret.length < 4) {
-        ret = "0" + ret;
-      }
-      return ret;
-    };
-    return (S4(buf[0]) + S4(buf[1]) + "-" + S4(buf[2]) + "-" + S4(buf[3]) + "-" + S4(buf[4]) + "-" + S4(buf[5]) + S4(buf[6]) + S4(buf[7]));
-  }
-  else {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-};
-
-
-
-
-/**
- * @function getByProp
- * @memberOf Array
- * @param {String} property - the name of the objects property
- * @param {String} value - the value we want it to equal
- * @description returns an item if its in a list and its property is equal to the value.
- * */
-Array.prototype.getByProp = function(property, value){
-  for(let i = 0; i < this.length; ++i){
-    if(this[i].hasOwnProperty(property)){
-      if(this[i][property] === value){
-        return this[i]
-      }
-    }
-  }
-  return undefined;
-};
-
-
-/**
- * @function getById
- * @memberOf Array
- * @param {String} value - the value we want it to equal
- * @description gets an item by its id and returns it if present.
- * */
-Array.prototype['getById'] = function(value) {
-  let item = this.getByProp('id', value);
-  if(!!item){
-    return item;
-  }
-  return false;
-};
-
-
-/**
- * @function removeById
- * @memberOf Array
- * @param {String} id - the id of the object we want to find
- * @description removes an object by finding its index.
- * */
-Array.prototype['removeById'] = function(id) {
-  let idx = this.getIndexById(id);
-  if(idx >= 0){
-    this.splice(idx, 1);
-  }
-  return this;
-};

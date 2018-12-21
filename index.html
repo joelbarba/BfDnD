@@ -2,14 +2,49 @@
 <html lang="en-ie">
 <head>
   <style>
+    .col-1-3 {
+      width: calc(33% - 50px); 
+      float: left; 
+      margin: 0 15px;
+      padding: 10px;
+      border: 1px solid gray;
+      min-height: 500px;
+    }
+
+    [bf-draggable] {
+      cursor: grab;
+      cursor: -webkit-grab;
+      width: 100px; 
+      height: 30px;
+      border: 5px solid gray; 
+      background: #ddd; 
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px;
+      text-align: center;
+    }
+
+    [bf-drop-container].dragging-over {
+      background: yellow;
+    }
+
+    .placeholder {
+      min-height: 50px;
+      border: 5px dashed #9E9E9E;
+      background: beige;
+      padding: 10px;
+      margin: 10px;
+      display: block;
+      text-align: center;
+    }
+
   </style>
 </head>
 
 <body ng-app="myApp">
-  <h1>ngTest</h1>
+  <h1>BfDnD Test</h1>
 
   <main></main>
-
 
   <script src="angular.js"></script>
   <script src="app.js"></script>
